@@ -1,2 +1,1 @@
-# tic-80.js
-API &amp; Code examples in Javascript (and Typescript)
+# TIC-80 Tutorials
