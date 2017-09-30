@@ -186,3 +186,211 @@ end
 
 Fantastic! Now the player can move to the left and right ... but you surely
 have noticed that you can move out of the screen! Let's fix that!
+
+Since this is a collision, we will have a new function in the main TIC()
+function called collisions()
+
+```lua
+function TIC()
+ cls(bgColor)
+ input()
+ update()
+ collisions()
+ draw()
+end
+```
+
+The collisions() function will handle all the game collisions. We will
+separate each collision into their own function. So let's create the collision
+check for player <-> screen now:
+
+
+```lua
+function collisions()
+ -- player <-> wall collision
+ playerWallCollision()
+end
+
+function playerWallCollision()
+ if player.x < 0 then
+  player.x = 0
+ elseif player.x+player.width > 240 then
+  player.x = 240 - player.width
+ end
+end
+```
+
+Ok - this is quite straight forward, since the screen width is 240 pixels.
+Our player is for now done. Let's have a look at the ball.
+
+## Our ball
+We begin to set up the ball in the init function and think what kind of
+parameters we will need for the ball. Like the player we need a position (x,y)
+and a width, height and color. Similarly we have a speed definition, this time
+not just in the x-axis but also the y-axis. This is clear, since the ball will
+fly not just in the x-axis! We will use a boolean to see if the ball is active
+or not (deactive). You will understand it in a bit.
+
+```lua
+function init()
+ -- ball
+ ball = {
+  x = player.x+(player.width/2)-1.5,
+  y = player.y-3,
+  width = 3,
+  height = 3,
+  color = 14,
+  deactive = true,
+  speed = {
+   x = 0,
+   y = 0,
+   max = 1.5
+  }
+ }
+end
+```
+
+Now we have the ball object. We want that the ball starts on the player paddle.
+If the player pressed the X-Key the ball will start to fly upward.
+Let's update the input() function.
+
+```lua
+function input()
+ if ball.deactive then
+  ball.x = player.x+(player.width/2)-1.5
+  ball.y = player.y-3
+
+  if btn(5) then
+   ball.speed.x = math.floor(math.random())*2-1
+   ball.speed.y = -1.5
+   ball.deactive = false
+  end
+ end
+end
+```
+
+Next we have to update or update() function.
+
+```lua
+function update()
+ -- update ball position
+ ball.x = ball.x + ball.speed.x
+ ball.y = ball.y + ball.speed.y
+
+ -- check max ball speed
+ if ball.speed.x > ball.speed.max then
+   ball.speed.x = ball.speed.max
+ end
+end
+```
+
+
+Next we have to draw the ball, so we update our drawGameObjects() function.
+
+```lua
+function drawGameObjects()
+ -- draw ball
+ rect(ball.x,
+  ball.y,
+  ball.width,
+  ball.height,
+  ball.color)
+end
+```
+
+Congratulation!
+
+We can now start our ball from the paddle, but it won't
+collide with the corners ... let's change this!
+
+```lua
+function collisions()
+ -- ball <-> wall collision
+ ballWallCollision()
+end
+
+function ballWallCollision()
+ if ball.y < 0 then
+  -- top
+  ball.speed.y = -ball.speed.y
+ elseif ball.x < 0 then
+  -- left
+  ball.speed.x = -ball.speed.x
+ elseif ball.x > 240 - ball.width then
+  -- right
+  ball.speed.x = -ball.speed.x
+ end
+end
+```
+
+Great! So we have now the collision ball <-> walls activated! It is not
+a mistake that I do not check the bottom collision in that function.
+If the ball collides on the bottom of the screen, the player should loose a
+life and the ball should reset to the starting position on the paddle.
+Let's do it right here:
+
+```lua
+function collisions()
+ -- ball <-> ground collision
+ ballGroundCollision()
+end
+
+function ballGroundCollision()
+ if ball.y > 136 - ball.width then
+  -- reset ball
+  ball.deactive = true
+  -- loss a life
+  if lives > 0 then
+   lives = lives - 1
+  elseif lives == 0 then
+   -- game over
+   gameOver()
+  end
+ end
+end
+```
+
+When you run the game it will crash as soon as the ball hits the ground.
+It is quite clear, why this happens. We have to define the lives variable
+and the gameOver() function.
+
+```lua
+function init()
+ -- variables
+ lives = 3
+end
+
+function gameOver()
+ print("Game Over",(240/2)-6*4.5,136/2)
+ spr(0,240/2-4,136/2+10)
+  if btn(5) then
+   init()
+  end
+end
+```
+
+Alright. So we have our variable lives defined to 3. Every time the ball
+hits the ground, one life will be subtracted. As soon as we have 0 lives,
+we go into the gameOver() function and show the text "Game Over" and load
+the sprite at position 0, which looks like this:
+
+![](./screenshots/breakout3.png)
+
+To restart the game, the player can press the X-Key.
+
+So that everything works correct, we need to update the TIC() function
+like this:
+
+```lua
+function TIC()
+ cls(backgroundColor)
+ input()
+ if lives>0 then
+  update()
+  collisions()
+  draw()
+ elseif lives==0 then
+  gameOver()
+ end
+end
+```
