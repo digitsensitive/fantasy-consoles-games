@@ -97,4 +97,31 @@ end
 
 If you run the game now you will see the following:
 
-![](klk)
+![](./screenshots/breakout1.png)
+
+Well, we see the player BUT we also see the console commands. We need to
+clear the screen! So let's do it in the TIC() function:
+
+```lua
+function init()
+ -- variables
+ bgColor = 0
+
+ -- our player
+ ...
+end
+
+function TIC()
+ cls(bgColor)
+ input()
+ update()
+ draw()
+end
+```
+
+I have defined a variable in the init() function and access it in the cls()
+function. So now it should look like this:
+
+![](./screenshots/breakout2.png)
+
+Great!
