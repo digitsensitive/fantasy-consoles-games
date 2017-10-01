@@ -576,10 +576,10 @@ Here the full code (4816 characters):
 -- script: lua
 
 function init()
-	-- variables
-	bgColor = 0
-	score = 0
-	lives = 3
+ -- variables
+ bgColor = 0
+ score = 0
+ lives = 3
 
  -- our player
  player = {
@@ -594,7 +594,7 @@ function init()
   }
  }
 
-	-- ball
+ -- ball
  ball = {
   x = player.x+(player.width/2)-1.5,
   y = player.y-5,
@@ -609,7 +609,7 @@ function init()
   }
  }
 
-	-- bricks
+ -- bricks
  bricks = {}
  brickCountWidth = 19
  brickCountHeight = 12
@@ -645,32 +645,32 @@ end
 
 function input()
  local sx = player.speed.x
-	local smax = player.speed.max
+ local smax = player.speed.max
 
-	-- move to left
-	if btn(2) then
-	 if sx>-smax then
-		 sx=sx-2
-		else
-		 sx=-smax
-		end	 
-	end
+  -- move to left
+  if btn(2) then
+   if sx>-smax then
+    sx=sx-2
+   else
+    sx=-smax
+   end
+  end
 
-	-- move to right
-	if btn(3) then
-	 if sx<smax then
-		 sx=sx+2
-		else
-		 sx=smax
-		end
-	end
+  -- move to right
+  if btn(3) then
+   if sx<smax then
+    sx=sx+2
+   else
+    sx=smax
+   end
+  end
 
-	player.speed.x=sx
-	player.speed.max=smax
+  player.speed.x=sx
+  player.speed.max=smax
 
-	if ball.deactive then
-  ball.x = player.x+(player.width/2)-1.5
-  ball.y = player.y-5
+  if ball.deactive then
+   ball.x = player.x+(player.width/2)-1.5
+   ball.y = player.y-5
 
   if btn(5) then
    ball.speed.x = math.floor(math.random())*2-1
@@ -682,58 +682,58 @@ end
 
 function update()
  local px = player.x
-	local psx = player.speed.x
-	local smax = player.speed.max
+ local psx = player.speed.x
+ local smax = player.speed.max
 
-	-- update player position
-	px=px+psx
+ -- update player position
+ px=px+psx
 
-	-- reduce player speed
-	if psx ~= 0 then
-		if psx > 0 then
-		 psx=psx-1
-		else
-		 psx=psx+1
-		end
-	end
+ -- reduce player speed
+ if psx ~= 0 then
+  if psx > 0 then
+   psx=psx-1
+  else
+   psx=psx+1
+  end
+ end
 
-	player.x=px
-	player.speed.x=psx
-	player.speed.max=smax
+ player.x=px
+ player.speed.x=psx
+ player.speed.max=smax
 
-	-- update ball position
-	ball.x = ball.x + ball.speed.x
-	ball.y = ball.y + ball.speed.y
+ -- update ball position
+ ball.x = ball.x + ball.speed.x
+ ball.y = ball.y + ball.speed.y
 
-	-- check max ball speed
-	if ball.speed.x > ball.speed.max then
-		ball.speed.x = ball.speed.max
-	end
+ -- check max ball speed
+ if ball.speed.x > ball.speed.max then
+  ball.speed.x = ball.speed.max
+ end
 end
 
 function collisions()
  -- player <-> wall collision
  playerWallCollision()
 
-	-- ball <-> wall collision
+ -- ball <-> wall collision
  ballWallCollision()
 
-	-- ball <-> ground collision
+ -- ball <-> ground collision
  ballGroundCollision()
 
-	-- player <-> ball collision
+ -- player <-> ball collision
  playerBallCollision()
 
-	-- ball <-> brick collision
+ -- ball <-> brick collision
  ballBrickCollision()
 end
 
 function playerWallCollision()
  if player.x < 0 then
 	 player.x = 0
-	elseif player.x+player.width > 240 then
-	 player.x = 240 - player.width
-	end
+ elseif player.x+player.width > 240 then
+  player.x = 240 - player.width
+ end
 end
 
 function ballWallCollision()
@@ -796,26 +796,26 @@ end
 function ballBrickCollision()
  for i,brick in pairs(bricks) do
  -- get parameters
-  local x = bricks[i].x
-  local y = bricks[i].y
-  local w = bricks[i].width
-  local h = bricks[i].height
+ local x = bricks[i].x
+ local y = bricks[i].y
+ local w = bricks[i].width
+ local h = bricks[i].height
 
-  -- check collision
-  if collide(ball, bricks[i]) then
-   -- collide left or right side
-   if y < ball.y and
-    ball.y < y+h and
-    ball.x < x or
-    x+w < ball.x then
+ -- check collision
+ if collide(ball, bricks[i]) then
+  -- collide left or right side
+  if y < ball.y and
+   ball.y < y+h and
+   ball.x < x or
+   x+w < ball.x then
     ball.speed.x = -ball.speed.x
-   end
-   -- collide top or bottom side        
+  end
+  -- collide top or bottom side		
    if ball.y < y or
     ball.y > y and
     x < ball.x and
     ball.x < x+w then
-    ball.speed.y = -ball.speed.y
+     ball.speed.y = -ball.speed.y
    end
    table.remove(bricks, i)
    score = score + 1
@@ -836,14 +836,14 @@ function drawGameObjects()
   player.height,
   player.color)
 
-	-- draw ball
+ -- draw ball
  rect(ball.x,
   ball.y,
   ball.width,
   ball.height,
   ball.color)
 
-	-- draw bricks
+ -- draw bricks
  for i,brick in pairs(bricks) do
   rect(bricks[i].x,
        bricks[i].y,
@@ -866,9 +866,9 @@ end
 
 function gameOver()
  print("Game Over",(240/2)-6*4.5,136/2)
-	spr(0,240/2-4,136/2+10)
-	if btn(5) then
-	 init()
-	end
+ spr(0,240/2-4,136/2+10)
+  if btn(5) then
+   init()
+  end
 end
 ```
