@@ -1,6 +1,9 @@
 # Simple Breakout clone
 
 In this short tutorial we are going to create a simple breakout clone.
+
+![](./screenshots/breakout.png)
+
 We will start with the following basic structure:
 
 ```lua
@@ -236,7 +239,7 @@ function init()
  -- ball
  ball = {
   x = player.x+(player.width/2)-1.5,
-  y = player.y-3,
+  y = player.y-5,
   width = 3,
   height = 3,
   color = 14,
@@ -258,7 +261,7 @@ Let's update the input() function.
 function input()
  if ball.deactive then
   ball.x = player.x+(player.width/2)-1.5
-  ball.y = player.y-3
+  ball.y = player.y-5
 
   if btn(5) then
    ball.speed.x = math.floor(math.random())*2-1
@@ -396,3 +399,168 @@ end
 ```
 
 ![](./screenshots/breakout4.png)
+
+Last but not least, let's do the collision check between ball and paddle:
+
+```lua
+function collisions()
+ -- player <-> ball collision
+ playerBallCollision()
+end
+
+function playerBallCollision()
+ if collide(player,ball) then
+  ball.speed.y = -ball.speed.y
+  ball.speed.x = ball.speed.x + 0.3*player.speed.x
+ end
+end
+
+function collide(a,b)
+ -- get parameters from a and b
+ local ax = a.x
+ local ay = a.y
+ local aw = a.width
+ local ah = a.height
+ local bx = b.x
+ local by = b.y
+ local bw = b.width
+ local bh = b.height
+
+ -- check collision
+ if ax < bx+bw and
+    ax+aw > bx and
+    ay < by+bh and
+    ah+ay > by then
+     -- collision
+     return true
+ end
+ -- no collision
+ return false
+end
+```
+
+## Our bricks
+So we have a paddle and a ball, but it is not quite a game yet.
+Let's create the central element of the game: The bricks.
+
+As always we start with the initialisation.
+```lua
+function init()
+ -- bricks
+ bricks = {}
+ brickCountWidth = 19
+ brickCountHeight = 12
+
+ -- create bricks
+ for i=0, brickCountHeight, 1 do
+  for j=0, brickCountWidth, 1 do
+   local brick = {
+    x = 10+j*11,
+    y = 10+i*5,
+    width = 10,
+    height = 4,
+    color = i+1
+   }
+   table.insert(bricks, brick)
+  end
+ end
+end
+```
+
+We define an object table of bricks and the amount of bricks on the width
+and heigth. Than we simply loop over it and create brick's, which we insert
+into the bricks object. That's it.
+
+Let's draw the bricks on the screen:
+
+```lua
+function drawGameObjects()
+ -- draw bricks
+ for i,brick in pairs(bricks) do
+  rect(bricks[i].x,
+       bricks[i].y,
+       bricks[i].width,
+       bricks[i].height,
+       bricks[i].color)
+ end
+end
+```
+
+Well done. Your game should now look like this:
+
+![](./screenshots/breakout5.png)
+
+But ooh the ball flies through the bricks! Let's create the collision.
+
+```lua
+function collisions()
+ -- ball <-> brick collision
+ ballBrickCollision()
+end
+
+function ballBrickCollision()
+ for i,brick in pairs(bricks) do
+ -- get parameters
+  local x = bricks[i].x
+  local y = bricks[i].y
+  local w = bricks[i].width
+  local h = bricks[i].height
+
+  -- check collision
+  if collide(ball, bricks[i]) then
+   -- collide left or right side
+   if y < ball.y and
+    ball.y < y+h and
+    ball.x < x or
+    x+w < ball.x then
+    ball.speed.x = -ball.speed.x
+   end
+   -- collide top or bottom side		
+   if ball.y < y or
+    ball.y > y and
+    x < ball.x and
+    ball.x < x+w then
+    ball.speed.y = -ball.speed.y
+   end
+   table.remove(bricks, i)
+   score = score + 1
+  end
+ end
+end
+```
+
+This might look a little bit complicated at first, but it isn't.
+We loop through the bricks and get the important parameters at first.
+We than check if there is any collision between the ball and the current brick
+we loop through. If there is no collision we go to the next brick.
+If there is a collision we check from which side: left/right or top/bottom.
+This is important, since the ball will bounce differently. At the end we
+remove the brick and add one point to the score.
+
+Before you start the game, do not forget to add the score variable, else it
+will crash:
+
+```lua
+function init()
+ -- variables
+ score = 0
+end
+```
+
+Great!
+
+## Our GUI
+Cool, we quite have a game now! Let's finish it up with the GUI.
+
+```lua
+function drawGameObjects()
+ print("Score ",5,1,7)
+ print(score,40,1,7)
+ print("Score ",5,0,15)
+ print(score,40,0,15)
+ print("Lives ",190,1,7)
+ print(lives,225,1,7)
+ print("Lives ",190,0,15)
+ print(lives,225,0,15)
+end
+```
