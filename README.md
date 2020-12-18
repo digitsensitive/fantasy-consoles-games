@@ -32,6 +32,8 @@ Also, the game can be packed into a player that works on all popular platforms a
 To make a retro styled game the whole process of creation takes place under some technical limitations:
 240x136 pixels display, 16 color palette, 256 8x8 color sprites, 4 channel sound and etc.
 
+### Games
+
 - [Breakout](https://github.com/digitsensitive/fantasy-consoles-games/blob/master/src/tic-80/breakout)
 - [Snake](https://github.com/digitsensitive/fantasy-consoles-games/blob/master/src/tic-80/snake)
 - [Tetris](https://github.com/digitsensitive/fantasy-consoles-games/blob/master/src/tic-80/tetris)
