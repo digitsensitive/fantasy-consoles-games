@@ -1,6 +1,8 @@
 # Fantasy Consoles Games
 
-Missing Text
+This is a collection of games I have created for different fantasy consoles.
+Have fun discovering, developing and playing! Ideas and corrections are highly
+desirable to constantly improve this repository!
 
 <div align="center">
 <a href="https://www.buymeacoffee.com/JZDVjsT26" target="blank">
@@ -8,15 +10,6 @@ Missing Text
 </div>
 
 ## Getting started
-
-### Prerequisites
-
-```
-Download and install Node.js @ https://nodejs.org/en
-Download and install yarn @ https://classic.yarnpkg.com/en/docs/install
-```
-
-### Installing
 
 Select a folder, navigate to it, and clone this repository
 with this command-line:
