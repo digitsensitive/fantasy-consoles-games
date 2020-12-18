@@ -18,7 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Updates
 
-- Add `snake` and `tetris` to `tic-80`
+- Add `snake`, `tetris` and `breakout` to `tic-80`
 - Repository created
 
 ---

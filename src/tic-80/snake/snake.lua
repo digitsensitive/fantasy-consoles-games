@@ -1,6 +1,6 @@
 -- title:  snake clone
 -- author: digitsensitive
--- desc:   a boring snake clone
+-- desc:   a short written snake clone
 -- script: lua
 
 -- global game settings
