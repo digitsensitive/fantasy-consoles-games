@@ -59,14 +59,17 @@ function update()
     end
 end
 
-function collisionsCheck()
+function collide(p)
     local px = b.x + 1
     local py = b.y + 1
+    return px > p.x and px < p.x + 8 and py > p.y and py < p.y + (p.s * GS.S)
+end
 
-    if px > p[1].x and px < p[1].x + 8 and py > p[1].y and py < p[1].y + (p[1].s * GS.S) then
+function collisionsCheck()
+    if collide(p[1]) then
         p[1].c = 11
         b.vx = -b.vx
-    elseif px > p[2].x and px < p[2].x + 8 and py > p[2].y and py < p[2].y + (p[2].s * GS.S) then
+    elseif collide(p[2]) then
         p[2].c = 11
         b.vx = -b.vx
     end
