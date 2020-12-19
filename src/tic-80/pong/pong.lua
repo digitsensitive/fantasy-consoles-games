@@ -5,13 +5,10 @@
 
 -- global game settings
 local GS = {W = 240, H = 136, S = 8, p1s = 0, p2s = 0, t = 0}
-
--- paddles
 local p = {
     {x = 2 * GS.S, y = 3 * GS.S, s = 4, c = 12},
     {x = 27.5 * GS.S, y = 3 * GS.S, s = 4, c = 12}
 }
--- ball
 local b
 
 function init()
@@ -35,7 +32,6 @@ function input()
 end
 
 function update()
-    -- update ball
     b.x = b.x + b.vx
     b.y = b.y + b.vy
 
@@ -43,7 +39,6 @@ function update()
         b.vy = -b.vy
     end
 
-    -- update enemy paddle
     if b.y > p[2].y and p[2].y + (p[2].s * GS.S) < GS.H then
         p[2].y = p[2].y + 1.6
     elseif p[2].y > 0 then
