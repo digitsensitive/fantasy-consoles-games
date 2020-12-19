@@ -39,6 +39,11 @@ To make a retro styled game the whole process of creation takes place under some
 - [Snake](https://github.com/digitsensitive/fantasy-consoles-games/blob/master/src/tic-80/snake)
 - [Tetris](https://github.com/digitsensitive/fantasy-consoles-games/blob/master/src/tic-80/tetris)
 
+## Lua Beautifier
+
+To ensure proper indentation and make the lua code more readable I use
+[Lua Beautifier](https://goonlinetools.com/lua-beautifier).
+
 ## Changelog
 
 [Learn about the latest improvements](https://github.com/digitsensitive/fantasy-consoles-games/blob/master/CHANGELOG.md)
