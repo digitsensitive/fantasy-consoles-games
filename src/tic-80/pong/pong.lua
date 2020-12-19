@@ -28,10 +28,8 @@ end
 
 function input()
     if btn(0) and p[1].y > 0 then
-        -- up
         p[1].y = p[1].y - 1
     elseif btn(1) and p[1].y + (p[1].s * GS.S) < GS.H then
-        -- down
         p[1].y = p[1].y + 1
     end
 end
@@ -41,19 +39,15 @@ function update()
     b.x = b.x + b.vx
     b.y = b.y + b.vy
 
-    if b.y + 3 > GS.H or b.y < 0 then
+    if b.y > GS.H or b.y < 0 then
         b.vy = -b.vy
     end
 
     -- update enemy paddle
-    if b.y > p[2].y then
-        if p[2].y + (p[2].s * GS.S) < GS.H then
-            p[2].y = p[2].y + 1.6
-        end -- down
-    else
-        if p[2].y > 0 then
-            p[2].y = p[2].y - 1.6
-        end -- up
+    if b.y > p[2].y and p[2].y + (p[2].s * GS.S) < GS.H then
+        p[2].y = p[2].y + 1.6
+    elseif p[2].y > 0 then
+        p[2].y = p[2].y - 1.6
     end
 
     if b.x > GS.W then
