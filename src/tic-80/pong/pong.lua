@@ -60,9 +60,8 @@ function update()
 end
 
 function collide(p)
-    local px = b.x + 1
-    local py = b.y + 1
-    return px > p.x and px < p.x + 8 and py > p.y and py < p.y + (p.s * GS.S)
+    local b = {x = b.x + 1, y = b.y + 1}
+    return b.x > p.x and b.x < p.x + 8 and b.y > p.y and b.y < p.y + (p.s * GS.S)
 end
 
 function collisionsCheck()
