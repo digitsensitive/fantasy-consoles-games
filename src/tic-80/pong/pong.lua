@@ -27,14 +27,12 @@ function resetBall(dir)
 end
 
 function input()
-    if btn(0) then
-        if p[1].y > 0 then
-            p[1].y = p[1].y - 1
-        end -- up
-    elseif btn(1) then
-        if p[1].y + (p[1].s * GS.S) < GS.H then
-            p[1].y = p[1].y + 1
-        end -- down
+    if btn(0) and p[1].y > 0 then
+        -- up
+        p[1].y = p[1].y - 1
+    elseif btn(1) and p[1].y + (p[1].s * GS.S) < GS.H then
+        -- down
+        p[1].y = p[1].y + 1
     end
 end
 
