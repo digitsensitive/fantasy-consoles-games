@@ -77,11 +77,7 @@ end
 function draw()
     cls(14)
     map()
-
-    -- draw ball
     circ(b.x, b.y, 2, b.c)
-
-    -- draw paddles
     for i, v in pairs(p) do
         for j = 0, v.s - 1 do
             if v.c == 11 then
@@ -94,8 +90,6 @@ function draw()
             rect(v.x, v.y + (j * GS.S), GS.S / 2, GS.S, v.c)
         end
     end
-
-    -- draw score and game version
     print(GS.p1s, 6, 6, 0)
     print(GS.p1s, 5, 5, 12)
     print(GS.p2s, 230, 6, 0)
