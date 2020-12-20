@@ -6,6 +6,15 @@
 2. [Game loop](#game-loop)
 3. [Short general helper functions](#short-general-helper-functions)
 4. [Helper functions](#helper-functions)
+   4.1. [Sprite Animations](#sprite-animations)
+   4.2. [Print text with a border](#print-text-with-a-border)
+   4.3. [Print text with a shadow at the top](#print-text-with-a-shadow-at-the-top)
+   4.4. [Print text horizontally centered](#print-text-horizontally-centered)
+   4.5. [Print text vertically centered](#print-text-vertically-centered)
+   4.6. [Print text centered](#print-text-centered)
+5. [Simple Scene Manager](#simple-scene-manager)
+6. [Finite state machine (FSM)](#finite-state-machine)
+7. [Simple particle system](#simple-particle-system)
 
 ## Basic setup
 
@@ -256,7 +265,7 @@ function printhc(t,y,c)
 end
 ```
 
-## Finite state machine (FSM)
+## Finite state machine
 
 ```lua
 -- FINITE STATE MACHINE
