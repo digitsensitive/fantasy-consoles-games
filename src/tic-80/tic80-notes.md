@@ -6,7 +6,7 @@ Table of contents generated with [markdown-toc](http://ecotrust-canada.github.io
 
 - [Basic setup](#basic-setup)
 - [Game loop](#game-loop)
-- [General helper functions](#short-general-helper-functions)
+- [General helper functions](#general-helper-functions)
 - [Helper functions](#helper-functions)
   - [Sprite Animations](#sprite-animations)
   - [Print text](#print-text)
