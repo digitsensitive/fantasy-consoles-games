@@ -1,5 +1,12 @@
 # TIC-80
 
+# Table of Contents
+
+1. [Basic setup](#basic-setup)
+2. [Game loop](#game-loop)
+3. [Short general helper functions](#short-general-helper-functions)
+4. [Helper functions](#helper-functions)
+
 ## Basic setup
 
 ```lua
