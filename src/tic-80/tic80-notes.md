@@ -2,6 +2,8 @@
 
 # Table of Contents
 
+Table of contents generated with [markdown-toc](http://ecotrust-canada.github.io/markdown-toc).
+
 - [TIC-80](#tic-80)
   - [Basic setup](#basic-setup)
   - [Game loop](#game-loop)
