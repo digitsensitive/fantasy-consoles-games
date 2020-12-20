@@ -1,6 +1,6 @@
 # TIC-80
 
-# Table of Contents
+## Table of Contents
 
 Table of contents generated with [markdown-toc](http://ecotrust-canada.github.io/markdown-toc).
 

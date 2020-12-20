@@ -1,5 +1,30 @@
 # Lua
 
+## Table of Contents
+
+Table of contents generated with [markdown-toc](http://ecotrust-canada.github.io/markdown-toc).
+
+- [Comments](#comments)
+- [Variables](#variables)
+- [Enumerations](#enumerations)
+- [Tables and Arrays](#tables-and-arrays)
+  - [\_ _index and _ \_newindex](#----index-and-----newindex)
+- [Loops](#loops)
+  - [The numerical for loop](#the-numerical-for-loop)
+- [Conditionals](#conditionals)
+- [Mathematical Functions](#mathematical-functions)
+  - [math.floor(x)](#mathfloor-x-)
+  - [math.random([m [, n]])](#mathrandom--m----n---)
+  - [math.randomseed ([x [, y]])](#mathrandomseed---x----y---)
+  - [Exponentiation operator](#exponentiation-operator)
+  - [Modulo](#modulo)
+- [Strings](#strings)
+  - [toString(v)](#tostring-v-)
+  - [Concatenation of strings](#concatenation-of-strings)
+  - [string.format](#stringformat)
+- [API: Tables](#api--tables)
+- [Classes](#classes)
+
 ## Comments
 
 ```lua
