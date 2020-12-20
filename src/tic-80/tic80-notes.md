@@ -4,22 +4,20 @@
 
 Table of contents generated with [markdown-toc](http://ecotrust-canada.github.io/markdown-toc).
 
-- [TIC-80](#tic-80)
-  - [Basic setup](#basic-setup)
-  - [Game loop](#game-loop)
-  - [Short general helper functions](#short-general-helper-functions)
-  - [Helper functions](#helper-functions)
-    - [Sprite Animations](#sprite-animations)
-    - [Print text with a border](#print-text-with-a-border)
-    - [Print text with a shadow at the top](#print-text-with-a-shadow-at-the-top)
-    - [Print text horizontally centered](#print-text-horizontally-centered)
-    - [Print text vertically centered](#print-text-vertically-centered)
-    - [Print text centered](#print-text-centered)
-  - [Simple Scene Manager](#simple-scene-manager)
-  - [Finite state machine](#finite-state-machine)
-  - [Simple particle system](#simple-particle-system)
-- [Unfinished Notes](#unfinished-notes)
-  - [Berzerk Notes](#berzerk-notes)
+- [Basic setup](#basic-setup)
+- [Game loop](#game-loop)
+- [General helper functions](#short-general-helper-functions)
+- [Helper functions](#helper-functions)
+  - [Sprite Animations](#sprite-animations)
+  - [Print text](#print-text)
+    - [With a border](#with-a-border)
+    - [With a shadow at the top](#with-a-shadow-at-the-top)
+    - [Horizontally centered](#horizontally-centered)
+    - [Vertically centered](#vertically-centered)
+    - [Centered](#centered)
+- [Simple Scene Manager](#simple-scene-manager)
+- [Finite state machine](#finite-state-machine)
+- [Simple particle system](#simple-particle-system)
 
 ## Basic setup
 
@@ -47,7 +45,7 @@ function TIC()
 end
 ```
 
-## Short general helper functions
+## General helper functions
 
 ```lua
 function cos(x) return math.cos(x) end
@@ -76,7 +74,9 @@ local animSpeed = 128
 local spriteID = (time()//animSpeed)%2
 ```
 
-### Print text with a border
+### Print text
+
+#### With a border
 
 c1 defines the inner color.
 c2 defines the border color.
@@ -96,7 +96,7 @@ function printf(t,x,y,c1,c2)
 end
 ```
 
-### Print text with a shadow at the top
+#### With a shadow at the top
 
 c1 defines the shadow color at the top.
 c2 defines the color of the text.
@@ -113,7 +113,7 @@ function printf(t,x,y,c1,c2)
 end
 ```
 
-### Print text horizontally centered
+#### Horizontally centered
 
 f defines the flag indicating whether fixed width printing is required.
 s defines the scale.
@@ -128,7 +128,7 @@ function printhc(t,y,c,f,s)
 end
 ```
 
-### Print text vertically centered
+#### Vertically centered
 
 f defines the flag indicating whether fixed width printing is required.
 s defines the scale.
@@ -143,7 +143,7 @@ function printvc(t,x,c,f,s)
 end
 ```
 
-### Print text centered
+#### Centered
 
 f defines the flag indicating whether fixed width printing is required.
 s defines the scale.
@@ -376,7 +376,7 @@ end
 
 # Unfinished Notes
 
-## Berzerk Notes
+## Berzerk
 
 -- ROOM GENERATOR START
 -- 256*256=65'536 rooms
