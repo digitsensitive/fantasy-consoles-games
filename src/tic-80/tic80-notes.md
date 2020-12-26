@@ -63,7 +63,7 @@ function rmv(t,e) return table.remove(t,e) end
 
 -- get maximum of two numbers
 function max(n1,n2) return math.max(n1,n2) end
-function clamp(l,n,h) return math.min(math.max(n,l),h) end
+function clamp(v,l,h) return math.min(math.max(v,l),h) end
 ```
 
 ## Helper functions
