@@ -8,6 +8,10 @@ Table of contents generated with [markdown-toc](http://ecotrust-canada.github.io
 - [Game loop](#game-loop)
 - [General helper functions](#general-helper-functions)
 - [Helper functions](#helper-functions)
+  - [Physics](#physics)
+    - [Add velocity to object](#add-velocity-to-object)
+    - [Apply friction to object](#apply-friction-to-object)
+    - [Apply gravity to object](#apply-gravity-to-object)
   - [Sprite Animations](#sprite-animations)
   - [Print text](#print-text)
     - [With a border](#with-a-border)
@@ -63,6 +67,36 @@ function clamp(l,n,h) return math.min(math.max(n,l),h) end
 ```
 
 ## Helper functions
+
+### Physics
+
+#### Add velocity to object
+
+```lua
+function addVelocityToObject(o)
+	o.x = o.x + o.vx
+	o.y = o.y + o.vy
+end
+```
+
+#### Apply friction to object
+
+```lua
+function applyFrictionToObject(o,fx,fy)
+	o.vx = o.vx * fx
+	o.vy = o.vy * fy
+end
+
+```
+
+#### Apply gravity to object
+
+```lua
+function applyGravityToObject(o, g)
+	o.vy = o.vy + g
+	o.vy = min(max(o.vy, -3), 3)
+end
+```
 
 ### Sprite Animations
 
