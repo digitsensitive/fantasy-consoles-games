@@ -54,6 +54,7 @@ end
 ```lua
 function cos(x) return math.cos(x) end
 function sin(x) return math.sin(x) end
+function tan(x) return math.tan(x) end
 
 function rnd(x,y) return math.random(x,y) end
 function rndArray(a) return a[math.random(#a)] end
@@ -64,6 +65,20 @@ function rmv(t,e) return table.remove(t,e) end
 -- get maximum of two numbers
 function max(n1,n2) return math.max(n1,n2) end
 function clamp(v,l,h) return math.min(math.max(v,l),h) end
+```
+
+It might be even easier to use the following shortcuts:
+
+```lua
+cos = math.cos
+sin = math.sin
+tan = math.tan
+rnd = math.random
+sqrt = math.sqrt
+rad = math.rad
+min = math.min
+max = math.max
+abs = math.abs
 ```
 
 ## Helper functions
