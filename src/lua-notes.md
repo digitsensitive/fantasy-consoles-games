@@ -6,6 +6,10 @@ Table of contents generated with [markdown-toc](http://ecotrust-canada.github.io
 
 - [Comments](#comments)
 - [Variables](#variables)
+- [Operators](#operators)
+  - [Relational operators](#relational-operators)
+  - [Arithmetic operators](#arithmetic-operators)
+  - [Logic](#logic)
 - [Enumerations](#enumerations)
 - [Tables and Arrays](#tables-and-arrays)
   - [\_ _index and _ \_newindex](#----index-and-----newindex)
@@ -16,7 +20,6 @@ Table of contents generated with [markdown-toc](http://ecotrust-canada.github.io
   - [math.floor(x)](#mathfloor-x-)
   - [math.random([m [, n]])](#mathrandom--m----n---)
   - [math.randomseed ([x [, y]])](#mathrandomseed---x----y---)
-  - [Exponentiation operator](#exponentiation-operator)
   - [Modulo](#modulo)
 - [Strings](#strings)
   - [toString(v)](#tostring-v-)
@@ -42,6 +45,62 @@ In general you should always use `local`. Same goes for functions, which you can
 ```lua
 local x = 4
 y,z = 4,9
+```
+
+## Operators
+
+### Relational operators
+
+```lua
+-- equal to
+==
+
+-- not equal to
+~=
+
+-- greater than
+>
+
+-- less than
+<
+
+-- greater than or equal to
+>=
+
+-- less than or equal to
+<=
+```
+
+### Arithmetic operators
+
+```lua
+-- Addition
++
+
+-- Subtraction
+-
+
+-- Multiplication
+*
+
+-- Division
+/
+
+-- Modulus
+%
+
+-- Exponent
+-- Use the built-in `^` operator rather than the `math.pow()` function.
+^
+```
+
+### Logic
+
+```lua
+nil and false  --> nil
+false and nil  --> false
+0 and 20       --> 20
+10 and 20      --> 20
 ```
 
 ## Enumerations
@@ -217,10 +276,6 @@ If called with two arguments, then returns [m,n].
 ### math.randomseed ([x [, y]])
 
 When called with at least one argument, the integer parameters `x` and `y`are joined into a 128-bit seed. Equal seeds produce equal sequences of numbers. The default for `y` is zero.
-
-### Exponentiation operator
-
-Use the built-in `^` operator rather than the `math.pow()` function.
 
 ### Modulo
 
