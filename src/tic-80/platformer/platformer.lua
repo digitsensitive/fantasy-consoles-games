@@ -26,9 +26,9 @@ p = {
     vy = 0,
     ax = 0.1,
     mv = 0.7,
-    mvup = -2,
+    jumpSpeed = -2,
     curFrame = 0,
-    flp = 0,
+    flip = 0,
     w = 7,
     h = 7,
     anim = {},
@@ -96,31 +96,27 @@ end
 -- controller ------------------------------------------------------------------
 function jump(o)
     if o.isOnGround and o.hasHitCeiling then
-        o.vy = o.mvup
+        o.vy = o.jumpSpeed
     end
 end
 
 function crouch(o)
-    o.anim = a_down
-    o.down = true
 end
 
 function moveLeft(o)
     o.vx = o.vx - o.ax
-    if abs(o.vx)>o.mv then
-        o.vx=-o.mv
+    if abs(o.vx) > o.mv then
+        o.vx = -o.mv
     end
-    o.flp = 1
-    o.anim = a_walk
+    o.flip = 1
 end
 
 function moveRight(o)
     o.vx = o.vx + o.ax
-    if o.vx>o.mv then
-        o.vx=o.mv
+    if o.vx > o.mv then
+        o.vx = o.mv
     end
-    o.flp = 0
-    o.anim = a_walk
+    o.flip = 0
 end
 
 -- update ----------------------------------------------------------------------
@@ -129,36 +125,33 @@ function update()
     GS.t = GS.t + 1
 end
 
+-- TODO: Review if no better approach exists
 function updatePlayer()
     applyFrictionToObject(p, GS.FRICTION_X, 1)
     applyGravityToObject(p, GS.GRAVITY)
 
-    --applies collision to the player
     if collide(p, 7, 7) then
-    -- new_dust(p.x + 4, p.y + 7, 2.5)
-    -- sfx(0)
     end
 
-    --moves the player
     addVelocityToObject(p)
 
-    --reset all variables
     p.x, p.y = p.x % (GS.W * GS.TS), p.y % (GS.H * GS.TS)
-    p.down = false
     p.anim = a_idle
 end
 
 -- draw ------------------------------------------------------------------------
 function draw()
-    spr(p.id + p.curFrame, p.x % GS.W, p.y % GS.H, 0, 1, p.flp)
+    spr(p.id + p.curFrame, p.x % GS.W, p.y % GS.H, 0, 1, p.flip)
 end
 
 -- collision -------------------------------------------------------------------
+-- TODO: Review if no better approach exists
 function collide(o, w, h)
     local hasCollided = false
     local x, vx, y, vy = o.x, o.vx, o.y, o.vy
 
-    if fget(mget((x + vx) // GS.TS, (y) // GS.TS), 0) or fget(mget((x + vx) // GS.TS, (y + h) // GS.TS), 0) or
+    if
+        fget(mget((x + vx) // GS.TS, (y) // GS.TS), 0) or fget(mget((x + vx) // GS.TS, (y + h) // GS.TS), 0) or
             fget(mget((x + vx + w) // GS.TS, (y) // GS.TS), 0) or
             fget(mget((x + vx + w) // GS.TS, (y + h) // GS.TS), 0)
      then
@@ -167,7 +160,8 @@ function collide(o, w, h)
 
     local vx = o.vx
 
-    if fget(mget((x + vx) // GS.TS, (y + vy) // GS.TS), 0) or fget(mget((x + vx + w) // GS.TS, (y + vy) // GS.TS), 0) or
+    if
+        fget(mget((x + vx) // GS.TS, (y + vy) // GS.TS), 0) or fget(mget((x + vx + w) // GS.TS, (y + vy) // GS.TS), 0) or
             fget(mget((x + vx) // GS.TS, (y + vy + h) // GS.TS), 0) or
             fget(mget((x + vx + w) // GS.TS, (y + vy + h) // GS.TS), 0)
      then
@@ -176,7 +170,7 @@ function collide(o, w, h)
         end
         o.vy = 0
     end
- 
+
     if fget(mget(x // GS.TS, (y + h + 1) // GS.TS), 0) or fget(mget((x + w) // GS.TS, (y + h + 1) // GS.TS), 0) then
         o.isOnGround = true
     else

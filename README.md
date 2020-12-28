@@ -38,6 +38,7 @@ To make a retro styled game the whole process of creation takes place under some
 - [Pong](https://github.com/digitsensitive/fantasy-consoles-games/blob/master/src/tic-80/pong)
 - [Snake](https://github.com/digitsensitive/fantasy-consoles-games/blob/master/src/tic-80/snake)
 - [Tetris](https://github.com/digitsensitive/fantasy-consoles-games/blob/master/src/tic-80/tetris)
+- [Platformer](https://github.com/digitsensitive/fantasy-consoles-games/blob/master/src/tic-80/platformer)
 
 ## Lua Beautifier
 
