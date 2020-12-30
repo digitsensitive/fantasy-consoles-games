@@ -3,7 +3,7 @@
 -- desc:   a basic platformer
 -- script: lua
 
--- global game settings
+-- global game settings --------------------------------------------------------
 local GS = {
     W = 240,
     H = 136,
@@ -17,7 +17,7 @@ local GS = {
     GRAVITY = .1
 }
 
--- player
+-- game objects ----------------------------------------------------------------
 p = {
     x = GS.HW,
     y = GS.HH,
