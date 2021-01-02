@@ -11,7 +11,7 @@ local GS = {
     W = 240,
     curPType = 4,
     t = 0,
-    bts = {h = 9, bgColor = 0},
+    bts = {h = 10, bgColor = 0},
     water = {mass = 1, maxCompress = 3}
 }
 
@@ -25,6 +25,7 @@ local cursor = {
 
 local P_TYPE = {
     AIR = 0,
+    MAGMA = 3,
     POWDER = 4,
     WATER = 10,
     CURSOR = 12,
@@ -56,6 +57,10 @@ function swapParticle(x1, y1, x2, y2)
         particles[y1 * GS.W + x1].prop
 end
 
+function resetParticle(x,y)
+    particles[y * GS.W + x]:reset()
+end
+
 -- button ----------------------------------------------------------------------
 local button = {}
 function button:create(s, c, x, y)
@@ -79,6 +84,7 @@ function button:draw()
     end
 
     -- draw text
+    print(self.s, self.x + 2, self.y + 3, 15)
     print(self.s, self.x + 2, self.y + 2, self.c)
 end
 
@@ -93,15 +99,16 @@ end
 
 -- particle --------------------------------------------------------------------
 local particle = {}
-function particle:new(x, y, type, mov, sink)
+function particle:new(x, y, type, mov, sink, flam)
     self.__index = self
     o = setmetatable({}, self)
     o.x = x
     o.y = y
     o.prop = {}
     o.prop.type = type
-    o.prop.sinkable = sink
     o.prop.movable = mov
+    o.prop.sinkable = sink
+    o.prop.flammable = flam
     o.prop.mass = GS.water.mass
     return o
 end
@@ -110,12 +117,21 @@ function particle:draw()
     pix(self.x, self.y, self.prop.type)
 end
 
+function particle:reset()
+    self.prop = {}
+    self.prop.type = P_TYPE.AIR
+    self.prop.movable = true
+    self.prop.sinkable = false
+    self.prop.flammable = false
+    self.prop.mass = GS.water.mass
+end
+
 -- init ------------------------------------------------------------------------
 function init()
     -- create empty air field
     for y = 0, GS.H do
         for x = 0, GS.W do
-            particles[y * GS.W + x] = particle:new(x, y, P_TYPE.AIR, true, false)
+            particles[y * GS.W + x] = particle:new(x, y, P_TYPE.AIR, true, false,false)
         end
     end
 
@@ -124,6 +140,7 @@ function init()
     ins(buttons, button:create("Water", P_TYPE.WATER, 20, 115))
     ins(buttons, button:create("Stone", P_TYPE.STONE, 20, 125))
     ins(buttons, button:create("Metal", P_TYPE.METAL, 60, 105))
+    ins(buttons, button:create("Magma", P_TYPE.MAGMA, 60, 115))
 end
 
 -- main ------------------------------------------------------------------------
@@ -153,6 +170,11 @@ function input()
             local p = getParticle(x, y)
             if p.prop.type == P_TYPE.AIR then
                 p.prop.type = GS.curPType
+
+                -- set movable parameter
+                if GS.curPType == P_TYPE.POWDER then
+                    p.prop.flammable = true
+                end
 
                 -- set sinkable parameter
                 if GS.curPType == P_TYPE.WATER then
@@ -232,6 +254,42 @@ function updateParticles()
                         end
                     end
                 end
+
+                -- magma
+                if p.prop.type == P_TYPE.MAGMA then
+                    if lowerParticle.prop.flammable then
+                        resetParticle(p.x,p.y+1)
+                        swapParticle(p.x, p.y, p.x, p.y+1)
+                      
+
+                        if lowerLeftParticle.prop.flammable then
+                            resetParticle(p.x-1,p.y+1)
+                            swapParticle(p.x, p.y+1, p.x-1, p.y+1)
+                        end
+
+                        if lowerRightParticle.prop.flammable then
+                            resetParticle(p.x+1,p.y+1)
+                            swapParticle(p.x, p.y+1, p.x+1, p.y+1)
+                        end
+                    end
+
+                    if GS.t % 2 == 0 then
+                        if
+                            lowerLeftParticle.prop.type == P_TYPE.AIR and leftParticle.prop.type == P_TYPE.AIR or
+                                lowerLeftParticle.prop.sinkable and leftParticle.prop.sinkable
+                         then
+                            swapParticle(p.x, p.y, p.x - 1, p.y + 1)
+                        end
+                    else
+                        if
+                            lowerRightParticle.prop.type == P_TYPE.AIR and rightParticle.prop.type == P_TYPE.AIR or
+                                lowerRightParticle.prop.sinkable and rightParticle.prop.sinkable
+                         then
+                            swapParticle(p.x, p.y, p.x + 1, p.y + 1)
+                        end
+                    end
+                end
+
             end
         end
     end
@@ -261,7 +319,6 @@ function drawUI()
     -- draw border of field
     rect(0,0,GS.W,GS.H,0)
     line(0,GS.H,GS.W,GS.H,14)
-    --rectb(0, 0, GS.W, GS.H, 14)
 
     for _, v in pairs(buttons) do
         v:draw()
