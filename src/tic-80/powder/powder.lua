@@ -11,7 +11,7 @@ local GS = {
     W = 240,
     curPType = 4,
     t = 0,
-    bts = {h = 9, borderColor = 12},
+    bts = {h = 9, bgColor = 0},
     water = {mass = 1, maxCompress = 3}
 }
 
@@ -25,7 +25,7 @@ local cursor = {
 
 local P_TYPE = {
     AIR = 0,
-    SAND = 4,
+    POWDER = 4,
     WATER = 10,
     CURSOR = 12,
     STONE = 13,
@@ -67,19 +67,19 @@ function button:create(s, c, x, y)
     o.w = print(o.s) + 3
     o.h = GS.bts.h
     o.c = c
-    o.borderColor = GS.bts.borderColor
+    o.bgColor = GS.bts.bgColor
     return o
 end
 
 function button:draw()
-    -- draw text
-    print(self.s, self.x + 2, self.y + 2, self.c)
-
-    -- draw border if activated
+    -- draw background if activated
     -- this is the case, when the current particle type is the color value
     if GS.curPType == self.c then
-        rectb(self.x, self.y, self.w, self.h, self.borderColor)
+        rect(self.x, self.y, self.w, self.h, self.bgColor)
     end
+
+    -- draw text
+    print(self.s, self.x + 2, self.y + 2, self.c)
 end
 
 function button:wasClicked(x, y)
@@ -120,7 +120,7 @@ function init()
     end
 
     -- create buttons
-    ins(buttons, button:create("Sand", P_TYPE.SAND, 20, 105))
+    ins(buttons, button:create("Powder", P_TYPE.POWDER, 20, 105))
     ins(buttons, button:create("Water", P_TYPE.WATER, 20, 115))
     ins(buttons, button:create("Stone", P_TYPE.STONE, 20, 125))
     ins(buttons, button:create("Metal", P_TYPE.METAL, 60, 105))
@@ -201,8 +201,8 @@ function updateParticles()
                     swapParticle(p.x, p.y, p.x, p.y + 1)
                 end
 
-                -- sand
-                if lowerParticle.prop.type == P_TYPE.SAND then
+                -- powder
+                if lowerParticle.prop.type == P_TYPE.POWDER then
                     if GS.t % 2 == 0 then
                         if
                             lowerLeftParticle.prop.type == P_TYPE.AIR and leftParticle.prop.type == P_TYPE.AIR or
