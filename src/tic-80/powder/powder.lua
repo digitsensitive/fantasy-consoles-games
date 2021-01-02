@@ -8,7 +8,7 @@ local GS = {
     -- screen height is 136, but starts at 0
     H = 100,
     -- screen width is 240, but starts at 0
-    W = 239,
+    W = 240,
     curPType = 4,
     t = 0,
     bts = {h = 9, borderColor = 12},
@@ -17,20 +17,19 @@ local GS = {
 
 -- game objects ----------------------------------------------------------------
 local cursor = {
-    type = 0,
     x = 0,
     y = 0,
-    r = 1,
-    c = 12,
-    minR = 3,
-    maxR = 20
+    r = {c = 1, min = 1, max = 1},
+    c = 12
 }
 
 local P_TYPE = {
     AIR = 0,
     SAND = 4,
     WATER = 10,
-    CURSOR = 12
+    CURSOR = 12,
+    STONE = 13,
+    METAL = 14
 }
 
 local particles = {}
@@ -72,9 +71,6 @@ function button:create(s, c, x, y)
     return o
 end
 
-function button:update()
-end
-
 function button:draw()
     -- draw text
     print(self.s, self.x + 2, self.y + 2, self.c)
@@ -97,16 +93,16 @@ end
 
 -- particle --------------------------------------------------------------------
 local particle = {}
-function particle:new(x, y, type)
+function particle:new(x, y, type, mov, sink)
     self.__index = self
     o = setmetatable({}, self)
     o.x = x
     o.y = y
     o.prop = {}
     o.prop.type = type
-
+    o.prop.sinkable = sink
+    o.prop.movable = mov
     o.prop.mass = GS.water.mass
-
     return o
 end
 
@@ -119,13 +115,15 @@ function init()
     -- create empty air field
     for y = 0, GS.H do
         for x = 0, GS.W do
-            particles[y * GS.W + x] = particle:new(x, y, P_TYPE.AIR)
+            particles[y * GS.W + x] = particle:new(x, y, P_TYPE.AIR, true, false)
         end
     end
 
     -- create buttons
     ins(buttons, button:create("Sand", P_TYPE.SAND, 20, 105))
     ins(buttons, button:create("Water", P_TYPE.WATER, 20, 115))
+    ins(buttons, button:create("Stone", P_TYPE.STONE, 20, 125))
+    ins(buttons, button:create("Metal", P_TYPE.METAL, 60, 105))
 end
 
 -- main ------------------------------------------------------------------------
@@ -144,29 +142,45 @@ function input()
     -- update cursor position and radius
     cursor.x = x
     cursor.y = y
-    cursor.r = clamp(cursor.r + sy, cursor.minR, cursor.maxR)
+    cursor.r.c = clamp(cursor.r.c + sy, cursor.r.min, cursor.r.max)
 
-    if l and cursor.type == 0 then
-        -- if left mouse clicked and cursor on field --> create new particles
-        local x = cursor.x + rnd(-cursor.r, cursor.r)
-        local y = cursor.y + rnd(-cursor.r, cursor.r)
-        local p = getParticle(x, y)
-        if p.prop.type == P_TYPE.AIR then
-            p.prop.type = GS.curPType
-        end
-    elseif l and cursor.type == 1 then
-        -- if left mouse clicked and cursor out the field --> check if button clicked
-        for _, v in pairs(buttons) do
-            v:wasClicked(cursor.x, cursor.y)
+    if l then
+        -- if left mouse clicked
+        if isOnPlayfield(cursor.x, cursor.y, cursor.r.c) then
+            -- create new particles
+            local x = cursor.x + rnd(-cursor.r.c, cursor.r.c)
+            local y = cursor.y + rnd(-cursor.r.c, cursor.r.c)
+            local p = getParticle(x, y)
+            if p.prop.type == P_TYPE.AIR then
+                p.prop.type = GS.curPType
+
+                -- set sinkable parameter
+                if GS.curPType == P_TYPE.WATER then
+                    p.prop.sinkable = true
+                end
+
+                -- set movable parameter
+                if GS.curPType == P_TYPE.METAL then
+                    p.prop.movable = false
+                end
+            end
+        else
+            -- evaluate if a button was clicked
+            for _, v in pairs(buttons) do
+                v:wasClicked(cursor.x, cursor.y)
+            end
         end
     end
+end
+
+function isOnPlayfield(x, y)
+    return x > 0 and x < GS.W-1 and y > 0 and y< GS.H-1
 end
 
 -- update ----------------------------------------------------------------------
 function update()
     GS.t = GS.t + 1
     updateParticles()
-    updateCursor()
 end
 
 function updateParticles()
@@ -182,19 +196,25 @@ function updateParticles()
                 local lowerLeftParticle = getParticle(p.x - 1, p.y + 1)
                 local lowerRightParticle = getParticle(p.x + 1, p.y + 1)
 
-                -- apply gravity
-                if lowerParticle.prop.type == P_TYPE.AIR then
+                -- apply gravity for movable objects if lower particle air or sinkable
+                if lowerParticle.prop.type == P_TYPE.AIR and p.prop.movable or lowerParticle.prop.sinkable then
                     swapParticle(p.x, p.y, p.x, p.y + 1)
                 end
 
                 -- sand
                 if lowerParticle.prop.type == P_TYPE.SAND then
                     if GS.t % 2 == 0 then
-                        if lowerLeftParticle.prop.type == P_TYPE.AIR then
+                        if
+                            lowerLeftParticle.prop.type == P_TYPE.AIR and leftParticle.prop.type == P_TYPE.AIR or
+                                lowerLeftParticle.prop.sinkable and leftParticle.prop.sinkable
+                         then
                             swapParticle(p.x, p.y, p.x - 1, p.y + 1)
                         end
                     else
-                        if lowerRightParticle.prop.type == P_TYPE.AIR then
+                        if
+                            lowerRightParticle.prop.type == P_TYPE.AIR and rightParticle.prop.type == P_TYPE.AIR or
+                                lowerRightParticle.prop.sinkable and rightParticle.prop.sinkable
+                         then
                             swapParticle(p.x, p.y, p.x + 1, p.y + 1)
                         end
                     end
@@ -217,25 +237,15 @@ function updateParticles()
     end
 end
 
-function updateCursor()
-    local r = cursor.r
-    if cursor.x - r <= 0 or cursor.x + r >= GS.W or cursor.y - r <= 0 or cursor.y + r >= GS.H then
-        cursor.type = 1
-    else
-        cursor.type = 0
-    end
-end
-
 -- draw ------------------------------------------------------------------------
 function draw()
-    -- clear screen
-    cls(0)
+    cls(15)
 
     -- hide system mouse cursor
     poke(0x3FFB, 0)
 
-    drawParticles()
     drawUI()
+    drawParticles()
     drawCursor()
 end
 
@@ -249,19 +259,21 @@ end
 
 function drawUI()
     -- draw border of field
-    rectb(0, 0, GS.W, GS.H, 15)
+    rect(0,0,GS.W,GS.H,0)
+    line(0,GS.H,GS.W,GS.H,14)
+    --rectb(0, 0, GS.W, GS.H, 14)
 
     for _, v in pairs(buttons) do
         v:draw()
     end
-
-    print(#particles, 100, 115, 13)
 end
 
 function drawCursor()
-    if cursor.type == 0 then
-        circb(cursor.x, cursor.y, cursor.r, cursor.c)
+    if isOnPlayfield(cursor.x, cursor.y, cursor.r.c) then
+        -- draw circle when on field
+        circb(cursor.x, cursor.y, cursor.r.c, cursor.c)
     else
+        -- draw only a point if out of field
         pix(cursor.x, cursor.y, cursor.c)
     end
 end
