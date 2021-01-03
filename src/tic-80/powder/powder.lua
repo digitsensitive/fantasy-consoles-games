@@ -11,7 +11,7 @@ local GS = {
     W = 240,
     curPType = 4,
     t = 0,
-    bts = {h = 10, bgColor = 0},
+    bts = {h = 9,borderColor = 12},
     water = {mass = 1, maxCompress = 3}
 }
 
@@ -67,6 +67,15 @@ function applyGravity(x, y)
 
     if lowerParticle.prop.type == P_TYPE.AIR or lowerParticle.prop.sinkable then
         swapParticle(x, y, x, y + 1)
+    end
+end
+
+function applySprayGravity(x, y)
+    local rnumb = rnd(-1, 1)
+    local lowerRandomParticle = getParticle(x + rnumb, y + 1)
+
+    if lowerRandomParticle.prop.type == P_TYPE.AIR or lowerRandomParticle.prop.sinkable then
+        swapParticle(x, y, x + rnumb, y + 1)
     end
 end
 
@@ -145,7 +154,7 @@ function button:create(s, c, x, y)
     o.w = print(o.s) + 3
     o.h = GS.bts.h
     o.c = c
-    o.bgColor = GS.bts.bgColor
+    o.borderColor = GS.bts.borderColor
     return o
 end
 
@@ -153,7 +162,7 @@ function button:draw()
     -- draw background if activated
     -- this is the case, when the current particle type is the color value
     if GS.curPType == self.c then
-        rect(self.x, self.y, self.w, self.h, self.bgColor)
+        rectb(self.x, self.y, self.w, self.h, self.borderColor)
     end
 
     -- draw text
@@ -299,7 +308,7 @@ function updateParticles()
 
                 -- water
                 if p.prop.type == P_TYPE.WATER then
-                    applyGravity(p.x, p.y)
+                    applySprayGravity(p.x, p.y)
                     applyFlow(p.x, p.y)
                 end
 
