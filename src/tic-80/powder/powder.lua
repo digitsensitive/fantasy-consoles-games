@@ -57,8 +57,81 @@ function swapParticle(x1, y1, x2, y2)
         particles[y1 * GS.W + x1].prop
 end
 
-function resetParticle(x,y)
+function resetParticle(x, y)
     particles[y * GS.W + x]:reset()
+end
+
+-- particle mechanics ----------------------------------------------------------
+function applyGravity(x, y)
+    local lowerParticle = getParticle(x, y + 1)
+
+    if lowerParticle.prop.type == P_TYPE.AIR or lowerParticle.prop.sinkable then
+        swapParticle(x, y, x, y + 1)
+    end
+end
+
+function applyFallAndSink(x, y)
+    local lowerParticle = getParticle(x, y + 1)
+    local leftParticle = getParticle(x - 1, y)
+    local rightParticle = getParticle(x + 1, y)
+    local lowerLeftParticle = getParticle(x - 1, y + 1)
+    local lowerRightParticle = getParticle(x + 1, y + 1)
+
+    if lowerParticle.prop.type ~= P_TYPE.AIR then
+        if GS.t % 2 == 0 then
+            if
+                lowerLeftParticle.prop.type == P_TYPE.AIR or
+                    lowerLeftParticle.prop.sinkable and leftParticle.prop.type == P_TYPE.AIR or
+                    leftParticle.prop.sinkable
+             then
+                swapParticle(x, y, x - 1, y + 1)
+            end
+        else
+            if
+                lowerRightParticle.prop.type == P_TYPE.AIR or
+                    lowerRightParticle.prop.sinkable and rightParticle.prop.type == P_TYPE.AIR or
+                    rightParticle.prop.sinkable
+             then
+                swapParticle(x, y, x + 1, y + 1)
+            end
+        end
+    end
+end
+
+function applyFlow(x, y)
+    local leftParticle = getParticle(x - 1, y)
+    local rightParticle = getParticle(x + 1, y)
+
+    if GS.t % 2 == 0 then
+        if leftParticle.prop.type == P_TYPE.AIR then
+            swapParticle(x, y, x - 1, y)
+        end
+    else
+        if rightParticle.prop.type == P_TYPE.AIR then
+            swapParticle(x, y, x + 1, y)
+        end
+    end
+end
+
+function applyBurn(x, y)
+    local lowerParticle = getParticle(x, y + 1)
+    local lowerLeftParticle = getParticle(x - 1, y + 1)
+    local lowerRightParticle = getParticle(x + 1, y + 1)
+
+    if lowerParticle.prop.flammable then
+        resetParticle(x, y + 1)
+        swapParticle(x, y, x, y + 1)
+
+        if lowerLeftParticle.prop.flammable then
+            resetParticle(x - 1, y + 1)
+            swapParticle(x, y + 1, x - 1, y + 1)
+        end
+
+        if lowerRightParticle.prop.flammable then
+            resetParticle(x + 1, y + 1)
+            swapParticle(x, y + 1, x + 1, y + 1)
+        end
+    end
 end
 
 -- button ----------------------------------------------------------------------
@@ -131,7 +204,7 @@ function init()
     -- create empty air field
     for y = 0, GS.H do
         for x = 0, GS.W do
-            particles[y * GS.W + x] = particle:new(x, y, P_TYPE.AIR, true, false,false)
+            particles[y * GS.W + x] = particle:new(x, y, P_TYPE.AIR, true, false, false)
         end
     end
 
@@ -196,7 +269,7 @@ function input()
 end
 
 function isOnPlayfield(x, y)
-    return x > 0 and x < GS.W-1 and y > 0 and y< GS.H-1
+    return x > 0 and x < GS.W - 1 and y > 0 and y < GS.H - 1
 end
 
 -- update ----------------------------------------------------------------------
@@ -218,78 +291,30 @@ function updateParticles()
                 local lowerLeftParticle = getParticle(p.x - 1, p.y + 1)
                 local lowerRightParticle = getParticle(p.x + 1, p.y + 1)
 
-                -- apply gravity for movable objects if lower particle air or sinkable
-                if lowerParticle.prop.type == P_TYPE.AIR and p.prop.movable or lowerParticle.prop.sinkable then
-                    swapParticle(p.x, p.y, p.x, p.y + 1)
-                end
-
                 -- powder
-                if lowerParticle.prop.type == P_TYPE.POWDER then
-                    if GS.t % 2 == 0 then
-                        if
-                            lowerLeftParticle.prop.type == P_TYPE.AIR and leftParticle.prop.type == P_TYPE.AIR or
-                                lowerLeftParticle.prop.sinkable and leftParticle.prop.sinkable
-                         then
-                            swapParticle(p.x, p.y, p.x - 1, p.y + 1)
-                        end
-                    else
-                        if
-                            lowerRightParticle.prop.type == P_TYPE.AIR and rightParticle.prop.type == P_TYPE.AIR or
-                                lowerRightParticle.prop.sinkable and rightParticle.prop.sinkable
-                         then
-                            swapParticle(p.x, p.y, p.x + 1, p.y + 1)
-                        end
-                    end
+                if p.prop.type == P_TYPE.POWDER then
+                    applyGravity(p.x, p.y)
+                    applyFallAndSink(p.x, p.y)
                 end
 
                 -- water
                 if p.prop.type == P_TYPE.WATER then
-                    if GS.t % 2 == 0 then
-                        if leftParticle.prop.type == P_TYPE.AIR then
-                            swapParticle(p.x, p.y, p.x - 1, p.y)
-                        end
-                    else
-                        if rightParticle.prop.type == P_TYPE.AIR then
-                            swapParticle(p.x, p.y, p.x + 1, p.y)
-                        end
-                    end
+                    applyGravity(p.x, p.y)
+                    applyFlow(p.x, p.y)
+                end
+
+                -- stone
+                if p.prop.type == P_TYPE.STONE then
+                    applyGravity(p.x, p.y)
+                    applyFallAndSink(p.x, p.y)
                 end
 
                 -- magma
                 if p.prop.type == P_TYPE.MAGMA then
-                    if lowerParticle.prop.flammable then
-                        resetParticle(p.x,p.y+1)
-                        swapParticle(p.x, p.y, p.x, p.y+1)
-                      
-
-                        if lowerLeftParticle.prop.flammable then
-                            resetParticle(p.x-1,p.y+1)
-                            swapParticle(p.x, p.y+1, p.x-1, p.y+1)
-                        end
-
-                        if lowerRightParticle.prop.flammable then
-                            resetParticle(p.x+1,p.y+1)
-                            swapParticle(p.x, p.y+1, p.x+1, p.y+1)
-                        end
-                    end
-
-                    if GS.t % 2 == 0 then
-                        if
-                            lowerLeftParticle.prop.type == P_TYPE.AIR and leftParticle.prop.type == P_TYPE.AIR or
-                                lowerLeftParticle.prop.sinkable and leftParticle.prop.sinkable
-                         then
-                            swapParticle(p.x, p.y, p.x - 1, p.y + 1)
-                        end
-                    else
-                        if
-                            lowerRightParticle.prop.type == P_TYPE.AIR and rightParticle.prop.type == P_TYPE.AIR or
-                                lowerRightParticle.prop.sinkable and rightParticle.prop.sinkable
-                         then
-                            swapParticle(p.x, p.y, p.x + 1, p.y + 1)
-                        end
-                    end
+                    applyGravity(p.x, p.y)
+                    applyBurn(p.x, p.y)
+                    applyFallAndSink(p.x, p.y)
                 end
-
             end
         end
     end
@@ -307,21 +332,21 @@ function draw()
     drawCursor()
 end
 
+function drawUI()
+    -- draw border of field
+    rect(0, 0, GS.W, GS.H, 0)
+    line(0, GS.H, GS.W, GS.H, 14)
+
+    for _, v in pairs(buttons) do
+        v:draw()
+    end
+end
+
 function drawParticles()
     for _, v in pairs(particles) do
         if v.prop.type ~= P_TYPE.AIR then
             v:draw()
         end
-    end
-end
-
-function drawUI()
-    -- draw border of field
-    rect(0,0,GS.W,GS.H,0)
-    line(0,GS.H,GS.W,GS.H,14)
-
-    for _, v in pairs(buttons) do
-        v:draw()
     end
 end
 
