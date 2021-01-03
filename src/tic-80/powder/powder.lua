@@ -1,6 +1,6 @@
 -- title:  powder
 -- author: digitsensitive
--- desc:   powder
+-- desc:   a clone of the original powder game (also known as dust)
 -- script: lua
 
 -- global game settings --------------------------------------------------------
@@ -11,7 +11,7 @@ local GS = {
     W = 240,
     curPType = 4,
     t = 0,
-    bts = {h = 9,borderColor = 12},
+    bts = {h = 10,bgColor = 0},
     water = {mass = 1, maxCompress = 3}
 }
 
@@ -154,7 +154,7 @@ function button:create(s, c, x, y)
     o.w = print(o.s) + 3
     o.h = GS.bts.h
     o.c = c
-    o.borderColor = GS.bts.borderColor
+    o.bgColor = GS.bts.bgColor
     return o
 end
 
@@ -162,7 +162,7 @@ function button:draw()
     -- draw background if activated
     -- this is the case, when the current particle type is the color value
     if GS.curPType == self.c then
-        rectb(self.x, self.y, self.w, self.h, self.borderColor)
+        rect(self.x, self.y, self.w, self.h, self.bgColor)
     end
 
     -- draw text
