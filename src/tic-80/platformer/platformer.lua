@@ -52,7 +52,7 @@ function clamp(v, l, h)
     return min(max(v, l), h)
 end
 
--- helper functions ------------------------------------------------------------
+-- specific helper functions ---------------------------------------------------
 function applyFrictionToObject(o, fx, fy)
     o.vx = o.vx * fx
     o.vy = o.vy * fy
