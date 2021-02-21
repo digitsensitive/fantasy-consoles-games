@@ -47,6 +47,7 @@ min = math.min
 max = math.max
 abs = math.abs
 del = table.remove
+
 function clamp(v, l, h)
     return min(max(v, l), h)
 end
@@ -130,9 +131,7 @@ function updatePlayer()
     applyFrictionToObject(p, GS.FRICTION_X, 1)
     applyGravityToObject(p, GS.GRAVITY)
 
-    if collide(p, 7, 7) then
-    end
-
+    collide(p, 7, 7)
     addVelocityToObject(p)
 
     p.x, p.y = p.x % (GS.W * GS.TS), p.y % (GS.H * GS.TS)
@@ -151,20 +150,20 @@ function collide(o, w, h)
     local x, vx, y, vy = o.x, o.vx, o.y, o.vy
 
     if
-        fget(mget((x + vx) // GS.TS, (y) // GS.TS), 0) or fget(mget((x + vx) // GS.TS, (y + h) // GS.TS), 0) or
-            fget(mget((x + vx + w) // GS.TS, (y) // GS.TS), 0) or
-            fget(mget((x + vx + w) // GS.TS, (y + h) // GS.TS), 0)
-     then
+    fget(mget((x + vx) // GS.TS, (y) // GS.TS), 0) or fget(mget((x + vx) // GS.TS, (y + h) // GS.TS), 0) or
+    fget(mget((x + vx + w) // GS.TS, (y) // GS.TS), 0) or
+    fget(mget((x + vx + w) // GS.TS, (y + h) // GS.TS), 0)
+    then
         o.vx = 0
     end
 
     local vx = o.vx
 
     if
-        fget(mget((x + vx) // GS.TS, (y + vy) // GS.TS), 0) or fget(mget((x + vx + w) // GS.TS, (y + vy) // GS.TS), 0) or
-            fget(mget((x + vx) // GS.TS, (y + vy + h) // GS.TS), 0) or
-            fget(mget((x + vx + w) // GS.TS, (y + vy + h) // GS.TS), 0)
-     then
+    fget(mget((x + vx) // GS.TS, (y + vy) // GS.TS), 0) or fget(mget((x + vx + w) // GS.TS, (y + vy) // GS.TS), 0) or
+    fget(mget((x + vx) // GS.TS, (y + vy + h) // GS.TS), 0) or
+    fget(mget((x + vx + w) // GS.TS, (y + vy + h) // GS.TS), 0)
+    then
         if o.vy > .6 then
             hasCollided = true
         end
