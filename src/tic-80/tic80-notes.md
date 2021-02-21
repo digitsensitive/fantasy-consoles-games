@@ -7,7 +7,7 @@ Table of contents generated with [markdown-toc](http://ecotrust-canada.github.io
 - [Basic setup](#basic-setup)
 - [Game loop](#game-loop)
 - [General helper functions](#general-helper-functions)
-- [Helper functions](#helper-functions)
+- [Specific helper functions](#specific-helper-functions)
   - [Physics](#physics)
     - [Add velocity to object](#add-velocity-to-object)
     - [Apply friction to object](#apply-friction-to-object)
@@ -81,7 +81,7 @@ max = math.max
 abs = math.abs
 ```
 
-## Helper functions
+## Specific helper functions
 
 ### Physics
 
