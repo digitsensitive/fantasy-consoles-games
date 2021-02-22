@@ -43,7 +43,7 @@ To make a retro styled game the whole process of creation takes place under some
 ## Lua Beautifier
 
 To ensure proper indentation and make the lua code more readable I use
-[Lua Beautifier](https://codebeautify.org/lua-beautifier) with 3 indent.
+[Lua Beautifier](https://goonlinetools.com/lua-beautifier/).
 
 ## Changelog
 
