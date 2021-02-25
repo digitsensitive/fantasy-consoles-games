@@ -23,6 +23,8 @@ local p = {
     id = 256,
     x = GS.HW - 4,
     y = 40,
+    W = 8,
+    H = 8,
     vx = 0,
     vy = 0,
     vmax = 2,
@@ -59,6 +61,7 @@ ins = table.insert
 rmv = table.remove
 
 -- specific helper functions ---------------------------------------------------
+-- simple rectangle collision
 function collide(a, b)
     -- get parameters from a and b
     local ax = a.x
@@ -137,6 +140,40 @@ function getAverageValueOfSurroundingFields(x,y)
 
     return avg
 end
+
+-- Print text with border
+function printf(t,x,y,c1,c2)
+	local x=x or 0
+	local y=y or 0
+	local c1=c1 or 12
+	local c2=c2 or 0
+
+	print(t,x-1,y,c2)
+	print(t,x,y-1,c2)
+	print(t,x+1,y,c2)
+	print(t,x,y+1,c2)
+	print(t,x,y,c1)
+end
+
+-- enum for sweetie-16 color palette
+local COLOR = {
+	BLACK = 0,
+	PURPLE = 1,
+	RED = 2,
+	ORANGE = 3,
+	YELLOW = 4,
+	LIGHT_GREEN = 5,
+	GREEN = 6,
+	DARK_GREEN = 7,
+	DARK_BLUE = 8,
+	BLUE = 9,
+	LIGHT_BLUE = 10,
+	CYAN = 11,
+	WHITE = 12,
+	LIGHT_GREY = 13,
+	GREY = 14,
+	DARK_GREY = 15,
+}
 
 -- init ------------------------------------------------------------------------
 function init()
@@ -239,7 +276,8 @@ end
 
 function spawnNewTrees()
     if GS.t%GS.spawnTime == 0 then
-        ins(obj, {type = OBJ_TYPE.TREE, id = rnd(0,1), x = rnd(0,GS.W-8), y = GS.H, mov = true})
+        ins(obj, {
+            type = OBJ_TYPE.TREE, id = rnd(0,3), x = rnd(0,GS.W-8), y = GS.H, mov = true})
     end
 end
 
@@ -260,7 +298,7 @@ function updateObjects()
             if collide(o,p) then
                 GS.gameOver = true
                 p.scale = 1.2
-                shakeScreen()
+                -- shakeScreen()
             end
         end
     end
@@ -270,6 +308,13 @@ function updatePlayer()
     if abs(p.vx) > 0 then
         p.x = p.x + p.vx
         p.vx = p.vx * 0.9
+    end
+
+    -- swap 
+    if p.x < 0 then
+        p.x = 0
+    elseif p.x > GS.W-p.W then
+        p.x = GS.W-p.W
     end
 end
 
@@ -307,5 +352,5 @@ function drawObjects()
 end
 
 function drawUI()
-    print("Score: " .. GS.t,2,2,4)
+    printf("Score: " .. GS.t,5,5,COLOR.YELLOW,COLOR.DARK_GREY)
 end
