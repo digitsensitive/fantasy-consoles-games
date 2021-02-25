@@ -8,7 +8,9 @@ Table of contents generated with [markdown-toc](http://ecotrust-canada.github.io
 - [Game loop](#game-loop)
 - [General helper functions](#general-helper-functions)
 - [Specific helper functions](#specific-helper-functions)
+  - [Color palette](#color-palette)
   - [Physics](#physics)
+    - [Simple collision](#simple-collision)
     - [Add velocity to object](#add-velocity-to-object)
     - [Apply friction to object](#apply-friction-to-object)
     - [Apply gravity to object](#apply-gravity-to-object)
@@ -83,7 +85,63 @@ abs = math.abs
 
 ## Specific helper functions
 
+### Color palette
+
+For the standard color palette `SWEETIE-16`.
+
+```lua
+-- enum for sweetie-16 color palette
+local COLOR = {
+	BLACK = 0,
+	PURPLE = 1,
+	RED = 2,
+	ORANGE = 3,
+	YELLOW = 4,
+	LIGHT_GREEN = 5,
+	GREEN = 6,
+	DARK_GREEN = 7,
+	DARK_BLUE = 8,
+	BLUE = 9,
+	LIGHT_BLUE = 10,
+	CYAN = 11,
+	WHITE = 12,
+	LIGHT_GREY = 13,
+	GREY = 14,
+	DARK_GREY = 15,
+}
+```
+
 ### Physics
+
+```lua
+function
+end
+```
+
+#### Simple collision
+
+```lua
+-- simple rectangle collision
+function collide(a, b)
+    -- get parameters from a and b
+    local ax = a.x
+    local ay = a.y
+    local aw = 8
+    local ah = 8
+    local bx = b.x
+    local by = b.y
+    local bw = 8
+    local bh = 8
+
+    -- check collision
+    if ax < bx + bw and ax + aw > bx and ay < by + bh and ah + ay > by then
+        -- collision
+        return true
+    end
+    -- no collision
+    return false
+end
+```
 
 #### Add velocity to object
 
@@ -131,6 +189,7 @@ c1 defines the inner color.
 c2 defines the border color.
 
 ```lua
+-- Print text with border
 function printf(t,x,y,c1,c2)
 	local x=x or 0
 	local y=y or 0
