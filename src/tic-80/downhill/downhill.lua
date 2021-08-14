@@ -5,18 +5,18 @@
 
 -- global game settings --------------------------------------------------------
 local GS = {
-    W = 240,
+    GROUND_FRICTION = 0.9,
     H = 136,
-    HW = 240 / 2,
     HH = 136 / 2,
-    t = 0,
-    spawn_time = 10,
+    HW = 240 / 2,
     SCROLL_SPEED = 1,
+    SHAKE_D = 4,
+    W = 240,
+    cs = nil,
     gameOver = false,
     shake = 30,
-    SHAKE_D = 4,
-    cs = nil,
-    GROUND_FRICTION = 0.9
+    spawn_time = 10,
+    t = 0
 }
 
 -- game objects ----------------------------------------------------------------
@@ -28,29 +28,29 @@ local SPR = {
 }
 
 local plr = {
-    cur_s = SPR.PLR.STAND,
-    x = GS.HW - 4,
-    y = 40,
     W = 8,
     H = 8,
+    V_MAX = 2,
+    cur_s = SPR.PLR.STAND,
+    flip = 0,
+    scale = 1,
     vx = 0,
     vy = 0,
-    V_MAX = 2,
-    scale = 1,
-    flip = 0
+    x = GS.HW - 4,
+    y = 40
 }
 
 local obj = {}
 
 local OBJ_TYPE = {
-    TREE = 1,
-    TRAIL = 2
+    TRAIL = 1,
+    TREE = 2
 }
 
 local SCENES = {
-    LOADING = 1,
-    MAIN_MENU = 2,
-    GAME = 3
+    GAME = 1,
+    LOADING = 2,
+    MAIN_MENU = 3
 }
 
 -- general helper functions ----------------------------------------------------
