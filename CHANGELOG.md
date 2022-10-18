@@ -14,6 +14,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## Version 0.0.27 - 2022-10-18
+
+### Updates
+
+- Move TIC-80 and Lua-Notes to blog (https://digitsensitive.github.io/notes)
+
+---
+
 ## Version 0.0.26 - 2021-02-23
 
 ### Updates
