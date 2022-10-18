@@ -43,8 +43,8 @@ To make a retro styled game the whole process of creation takes place under some
 
 ## Lua Beautifier
 
-To ensure proper indentation and make the lua code more readable I use
-[Lua Beautifier](https://goonlinetools.com/lua-beautifier/).
+To ensure proper indentation and make the lua code more readable I use the
+[StyLua](https://marketplace.visualstudio.com/items?itemName=JohnnyMorganz.stylua) extension for VSCode.
 
 ## Changelog
 
