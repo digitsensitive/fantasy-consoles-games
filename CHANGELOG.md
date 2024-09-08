@@ -14,6 +14,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## Version 0.0.28 - 2024-09-08
+
+### Updates
+
+- Update `README.md`
+- Add Game Zyx (Remake of Qix)
+
+---
+
 ## Version 0.0.27 - 2022-10-18
 
 ### Updates
