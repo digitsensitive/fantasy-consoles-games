@@ -1,4 +1,4 @@
--- title:   Zyx (Qix Remake)
+-- title:   Hex (Qix Remake)
 -- author:  Eric (digitsensitive)
 -- desc:    Remake of the famous Qix Gameboy Game released in 1981
 -- site:    digitsensitive.github.io
@@ -10,12 +10,12 @@
 local GS = {
     time = 0,
     fps = 20,
-    score = 1000, -- total player score
-    pf_is = 40,   -- percent pf current
+    score = 0,    -- total player score
+    pf_is = 0,    -- percent pf current
     PF_GOAL = 75, -- percent pf goal
     PF = {        -- play field
         X = 39,   -- x offset
-        Y = 29,   -- y offset
+        Y = 28,   -- y offset
         W = 160,  -- width
         H = 106,  -- height
     },
@@ -35,8 +35,7 @@ local KEY = {
     DOWN = 1,
     LEFT = 2,
     RIGHT = 3,
-    A = 6,
-    S = 7
+    A = 4
 }
 
 local p = {
@@ -46,9 +45,13 @@ local p = {
     ly = 106, -- last position y
     dir = dirs[0],
     ldir = dirs[0],
-    c = 4,
+    c = 6,
     s = 1,
     isDrawing = false,
+}
+
+local e = {
+
 }
 
 -- pixel types with the corresponding colors
@@ -82,7 +85,9 @@ end
 
 local sMgr = sceneManager()
 
--- specific definitions and functions ------------------------------------------
+-- general definitions and functions -------------------------------------------
+local flr = math.floor
+
 local function printhc(t, y, c, f, s)
     local f = f or false
     local s = s or 1
@@ -141,12 +146,14 @@ function Menu()
         -- Calculate the Y position using sine wave
         local y_offset = math.sin(GS.time) * 2
         local title_y = 20 + y_offset
-        printhc("Zyx", title_y, 6, false, 3)
+        printhc("Hex", title_y, 0, false, 3)
+        printhc("Hex", title_y - 1, 6, false, 3)
         rect(80, 60 + cSel * 15, 5, 5, 6)
         printhc("Play Game", 60, 0, false, 1)
         printhc("Readme", 75, 0, false, 1)
         rect(104, 98, 9, 9, 6)
         printhc("Press A to Select", 100, 0, false, 1)
+        printhc("(c) digitsensitive.github.io", 120, 14, false, 1)
     end
 
     return s
@@ -180,6 +187,7 @@ function Readme()
         rect(102, 98, 9, 9, 6)
         printhc("Remake of Qix by Randy & Sandy Pfeiffer", 60, 0, false, 1)
         printhc("Published by Taito America in 1981", 70, 0, false, 1)
+        printhc("Move with Arrow Keys, Draw with A&B", 80, 0, false, 1)
         printhc("Press < to go back", 100, 0, false, 1)
     end
 
@@ -242,7 +250,7 @@ function Game()
         end
 
         if p.isDrawing then
-            if not onBlackPixel(p.x, p.y) then
+            if not onBorder(p.x, p.y) then
                 if tempDraw.startDirectionDrawing.x == 0 and tempDraw.startDirectionDrawing.y == 0 then
                     tempDraw.startPos = { x = p.lx, y = p.ly }
                     tempDraw.startDirectionDrawing = { x = p.dir.x, y = p.dir.y }
@@ -254,6 +262,7 @@ function Game()
                     p.isDrawing = false
                     table.insert(tempDraw.edgeCases, { x = p.lx, y = p.ly })
                     evaluateDrawing()
+                    updateScoreAndPlayField()
                 else
                     p.x = p.lx
                     p.y = p.ly
@@ -276,8 +285,8 @@ function Game()
         cls(12)
 
         -- draw UI -------------------------------------------------------------
-        print("ZYX", 40, 10, 0, false, 2)
-        print(GS.pf_is .. "/" .. GS.PF_GOAL .. " %", 100, 15, 0, false, 1)
+        print("HEX", 40, 10, 6, false, 2)
+        print(GS.pf_is .. " / " .. GS.PF_GOAL .. " %", 100, 15, 0, false, 1)
         print(GS.score, 160, 15, 0, false, 1)
 
         -- draw playfield ------------------------------------------------------
@@ -303,13 +312,15 @@ function Game()
         end
 
         -- draw player
+        rect(GS.PF.X + p.x - 1, GS.PF.Y + p.y - 1, 3, 3, 7)
         pix(GS.PF.X + p.x, GS.PF.Y + p.y, p.c)
     end
 
     return s
 end
 
-function onBlackPixel(x, y)
+-- specific definitions and functions ------------------------------------------
+function onBorder(x, y)
     if GS.pixels[y][x].type == TYPE.BORDER then
         return true
     end
@@ -417,8 +428,6 @@ function floodFill(x, y)
         return
     end
 
-
-
     pixel.type = TYPE.FILL
     pixel.isWalkable = false
 
@@ -426,6 +435,24 @@ function floodFill(x, y)
     floodFill(x - 1, y)
     floodFill(x, y + 1)
     floodFill(x, y - 1)
+end
+
+function updateScoreAndPlayField()
+    local empty = 0
+    local filled = 0
+    for y = 1, #GS.pixels do
+        for x = 1, #GS.pixels[y] do
+            local pixel = GS.pixels[y][x]
+            if pixel.type == TYPE.FILL then
+                filled = filled + 1
+            elseif pixel.type == TYPE.EMPTY then
+                empty = empty + 1
+            end
+        end
+    end
+
+    GS.score = filled * 0.2
+    GS.pf_is = flr(100 * (filled / (empty + filled)))
 end
 
 -- init ------------------------------------------------------------------------

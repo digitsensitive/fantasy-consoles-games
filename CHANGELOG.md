@@ -19,7 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Updates
 
 - Update `README.md`
-- Add Game Zyx (Remake of Qix)
+- Add Game Hex (Remake of Qix)
 
 ---
 
