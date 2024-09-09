@@ -4,7 +4,15 @@
 -- script: lua
 
 -- global game settings --------------------------------------------------------
+local SCENES = {
+	MENU = 1,
+	PLAY = 2,
+	GAMEOVER = 3,
+}
+
 local GS = {
+	cs = SCENES.MENU,
+	gameOver = false,
 	W = 240,
 	H = 136,
 	HW = 240 / 2,
@@ -53,6 +61,36 @@ function clamp(v, l, h)
 end
 
 -- specific helper functions ---------------------------------------------------
+
+-- center text horizontally
+function printhc(t, y, c, f, s)
+	local f = f or false
+	local s = s or 1
+	local w = print(t, -8, -8) * s
+	local x = (240 - w) / 2
+	print(t, x, y, c, f, s)
+end
+
+-- enum for sweetie-16 color palette
+local COLOR = {
+	BLACK = 0,
+	PURPLE = 1,
+	RED = 2,
+	ORANGE = 3,
+	YELLOW = 4,
+	LIGHT_GREEN = 5,
+	GREEN = 6,
+	DARK_GREEN = 7,
+	DARK_BLUE = 8,
+	BLUE = 9,
+	LIGHT_BLUE = 10,
+	CYAN = 11,
+	WHITE = 12,
+	LIGHT_GREY = 13,
+	GREY = 14,
+	DARK_GREY = 15,
+}
+
 function applyFrictionToObject(o, fx, fy)
 	o.vx = o.vx * fx
 	o.vy = o.vy * fy
@@ -68,14 +106,35 @@ function addVelocityToObject(o)
 	o.y = o.y + o.vy
 end
 
--- main ------------------------------------------------------------------------
+-- TIC main --------------------------------------------------------------------
 function TIC()
-	cls(0)
-	map((p.x // GS.W) * GS.TW, (p.y // GS.H) * GS.TH, GS.TW, GS.TH, 0, 0, 0)
+	if GS.cs == SCENES.MENU then
+		cls(8)
+		printhc("A day to jump ahead", 50, COLOR.CYAN, false, 2)
+		printhc("Press Z to Start Game", 70, COLOR.LIGHT_GREY)
 
-	input()
-	update()
-	draw()
+		-- check if z is pressed
+		if btn(4) then
+			GS.gameOver = false
+			GS.cs = SCENES.PLAY
+		end
+	elseif GS.cs == SCENES.PLAY then
+		cls(0)
+		if not GS.gameOver then
+			map((p.x // GS.W) * GS.TW, (p.y // GS.H) * GS.TH, GS.TW, GS.TH, 0, 0, 0)
+			input()
+			update()
+			draw()
+		else
+			printhc("Game Over", 50, COLOR.BLACK, false, 2)
+			printhc("Press X to restart", 70, COLOR.LIGHT_GREY)
+
+			-- check if x is pressed
+			if btn(5) then
+				GS.cs = SCENES.MENU
+			end
+		end
+	end
 end
 
 -- input -----------------------------------------------------------------------
