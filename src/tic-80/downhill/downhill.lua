@@ -1,6 +1,6 @@
--- title:  downhill
--- author: digitsensitive
--- desc:   ski downhill as far as possible
+-- title:  Downhill
+-- author: digitsensitive (digitsensitive.github.io)
+-- desc:   Ski downhill as far as possible
 -- script: lua
 
 -- global game settings --------------------------------------------------------

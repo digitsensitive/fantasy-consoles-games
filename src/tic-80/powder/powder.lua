@@ -1,6 +1,6 @@
--- title:  powder
--- author: digitsensitive
--- desc:   a clone of the original powder game (also known as dust)
+-- title:  Powder
+-- author: digitsensitive (digitsensitive.github.io)
+-- desc:   A clone of the original powder game (also known as dust)
 -- script: lua
 
 -- global game settings --------------------------------------------------------

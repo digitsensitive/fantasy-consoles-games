@@ -1,6 +1,6 @@
--- title:  pong clone
--- author: digitsensitive
--- desc:   a short written pong clone
+-- title:  Pong clone
+-- author: digitsensitive (digitsensitive.github.io)
+-- desc:   A short written pong clone
 -- script: lua
 
 -- global game settings --------------------------------------------------------
@@ -8,7 +8,7 @@ local GS = { W = 240, H = 136, S = 8, p1s = 0, p2s = 0, t = 0 }
 
 -- game objects ----------------------------------------------------------------
 local p = {
-	{ x = 2 * GS.S, y = 3 * GS.S, s = 4, c = 12 },
+	{ x = 2 * GS.S,    y = 3 * GS.S, s = 4, c = 12 },
 	{ x = 27.5 * GS.S, y = 3 * GS.S, s = 4, c = 12 },
 }
 local b

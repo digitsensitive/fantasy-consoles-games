@@ -1,6 +1,6 @@
--- title:  tetris
--- author: digitsensitive
--- desc:   a short written tetris clone
+-- title:  Tetris
+-- author: digitsensitive (digitsensitive.github.io)
+-- desc:   A short written tetris clone
 -- script: lua
 
 g = {

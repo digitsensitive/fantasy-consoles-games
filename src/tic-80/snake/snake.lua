@@ -1,6 +1,6 @@
--- title:  snake clone
--- author: digitsensitive
--- desc:   a short written snake clone
+-- title:  Anake clone
+-- author: digitsensitive (digitsensitive.github.io)
+-- desc:   A short written snake clone
 -- script: lua
 
 -- global game settings
@@ -33,9 +33,11 @@ local food = {
 function rnd(x, y)
 	return math.random(x, y)
 end
+
 function ins(t, e)
 	return table.insert(t, e)
 end
+
 function rmv(t, e)
 	return table.remove(t, e)
 end

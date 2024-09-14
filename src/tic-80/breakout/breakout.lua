@@ -1,6 +1,6 @@
--- title:  breakout
--- author: digitsensitive
--- desc:   a short written breakout clone
+-- title:  Breakout
+-- author: digitsensitive (digitsensitive.github.io)
+-- desc:   A short written breakout clone
 -- script: lua
 
 function init()

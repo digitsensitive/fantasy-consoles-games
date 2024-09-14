@@ -1,6 +1,6 @@
--- title:  basic platformer
--- author: digitsensitive
--- desc:   a basic platformer
+-- title:  Basic platformer
+-- author: digitsensitive (digitsensitive.github.io)
+-- desc:   A basic platformer
 -- script: lua
 
 -- global game settings --------------------------------------------------------

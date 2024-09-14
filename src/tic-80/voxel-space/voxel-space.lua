@@ -1,6 +1,6 @@
--- title:  voxel space
--- author: digitsensitive
--- desc:   voxel raster graphics rendering engine demo
+-- title:  Voxel space
+-- author: digitsensitive (digitsensitive.github.io)
+-- desc:   Voxel raster graphics rendering engine demo
 -- script: lua
 
 -- References:

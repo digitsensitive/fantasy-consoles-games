@@ -1,10 +1,8 @@
 -- title:   Hex (Qix Remake)
--- author:  Eric (digitsensitive)
+-- author:  digitsensitive (digitsensitive.github.io)
 -- desc:    Remake of the famous Qix Gameboy Game released in 1981
--- site:    digitsensitive.github.io
--- license: MIT License
--- version: 0.1
 -- script:  lua
+
 
 -- global game settings --------------------------------------------------------
 local GS = {
