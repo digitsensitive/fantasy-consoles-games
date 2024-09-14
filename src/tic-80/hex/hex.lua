@@ -169,7 +169,6 @@ function linePoint(x1, y1, x2, y2, px, py)
     local lineLen = dist(x1, y1, x2, y2);
     local buffer = 0.1;
 
-
     if d1 + d2 >= lineLen - buffer and d1 + d2 <= lineLen + buffer then
         return true
     end
@@ -325,14 +324,14 @@ function Game()
             p.ly = p.y
             p.ldir = p.dir
 
-            -- input ---------------------------------------------------------------
+            -- input -----------------------------------------------------------
             s:input()
 
             if p.isDrawing and p.ldir ~= p.dir then
                 ins(tempDraw.edgeCases, { x = p.lx, y = p.ly })
             end
 
-            -- update  -------------------------------------------------------------
+            -- update  ---------------------------------------------------------
             if GS.time % 2 == 0 then
                 s:updatePlayer()
                 s:updateHex()
