@@ -1,4 +1,4 @@
--- title:  Anake clone
+-- title:  Snake clone
 -- author: digitsensitive (digitsensitive.github.io)
 -- desc:   A short written snake clone
 -- script: lua
