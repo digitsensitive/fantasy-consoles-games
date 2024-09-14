@@ -7,6 +7,7 @@
 local GS = {
 	SIZE = 8, -- block size
 	score = 0, -- score
+	BGC = 14 -- background color
 }
 
 local dirs = {
@@ -30,23 +31,12 @@ local food = {
 	color = 5,
 }
 
-function rnd(x, y)
-	return math.random(x, y)
-end
+-- general definitions and functions -------------------------------------------
+local rnd = math.random
+local ins = table.insert
+local rmv = table.remove
 
-function ins(t, e)
-	return table.insert(t, e)
-end
-
-function rmv(t, e)
-	return table.remove(t, e)
-end
-
-function init()
-	t = 0
-	newFood()
-end
-
+-- input -----------------------------------------------------------------------
 function input()
 	local lastDir = dir
 
@@ -65,6 +55,7 @@ function input()
 	end
 end
 
+-- update ----------------------------------------------------------------------
 function update()
 	updateSnake()
 end
@@ -93,22 +84,23 @@ function updateSnake()
 	end
 end
 
+-- draw ------------------------------------------------------------------------
 function draw()
-	cls(14)
+	cls(GS.BGC)
 	drawFood()
 	drawSnake()
 	drawScore()
 	print("v1.0.1", 200, 130, 5)
 end
 
+function drawFood()
+	rect(food.x * GS.SIZE, food.y * GS.SIZE, GS.SIZE, GS.SIZE, food.color)
+end
+
 function drawSnake()
 	for i, v in pairs(snake) do
 		rect(v.x * GS.SIZE, v.y * GS.SIZE, GS.SIZE, GS.SIZE, 4)
 	end
-end
-
-function drawFood()
-	rect(food.x * GS.SIZE, food.y * GS.SIZE, GS.SIZE, GS.SIZE, food.color)
 end
 
 function drawScore()
@@ -126,15 +118,19 @@ function newFood()
 	end
 end
 
-init()
+-- init ------------------------------------------------------------------------
+function init()
+	t = 0
+	newFood()
+end
 
+-- main ------------------------------------------------------------------------
+init()
 function TIC()
 	input()
-
 	t = t + 1
 	if t % 10 == 0 then
 		update()
 	end
-
 	draw()
 end
